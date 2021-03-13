@@ -85,7 +85,7 @@ export function handleTransfer(event: TransferEvent): void {
     event.params.tokenId.toHexString(),
   ]);
   // let previousOwner = Owner.load(event.params.from.toHexString());
-  // let newOwner = Owner.load(event.params.to.toHexString());
+  let newOwner = Owner.load(event.params.to.toHexString());
   let token = Token.load(event.params.tokenId.toHexString());
   let contract = Contract.load(event.address.toHexString());
   let instance = ERC721.bind(event.address);
@@ -96,10 +96,11 @@ export function handleTransfer(event: TransferEvent): void {
   //   previousOwner = new Owner(event.params.from.toHexString())
   //   previousOwner.ownedTokens = new Array<string>();
   // }
-  // if (newOwner == null) {
-  //   newOwner = new Owner(event.params.to.toHexString())
-  //   newOwner.ownedTokens = new Array<string>();
-  // }
+  if (newOwner == null) {
+    newOwner = new Owner(event.params.to.toHexString());
+    // newOwner.ownedTokens = new Array<string>();
+  }
+
   if (token == null) {
     log.info('liuhl2', []);
     token = new Token(event.params.tokenId.toHexString());
@@ -154,7 +155,7 @@ export function handleTransfer(event: TransferEvent): void {
   // }
 
   // previousOwner.save();
-  // newOwner.save();
+  newOwner.save();
   token.save();
   contract.save();
 
