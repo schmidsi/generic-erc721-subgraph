@@ -90,7 +90,7 @@ export function handleTransfer(event: TransferEvent): void {
   let contract = Contract.load(event.address.toHexString());
   let instance = ERC721.bind(event.address);
 
-  log.info('asefasef', []);
+  log.info('liuhl', []);
 
   // if (previousOwner == null) {
   //   previousOwner = new Owner(event.params.from.toHexString())
@@ -101,22 +101,22 @@ export function handleTransfer(event: TransferEvent): void {
   //   newOwner.ownedTokens = new Array<string>();
   // }
   if (token == null) {
-    log.info('asefasef2', []);
+    log.info('liuhl2', []);
     token = new Token(event.params.tokenId.toHexString());
-    log.info('asefasef2.1', []);
+    log.info('liuhl2.1', []);
     token.owner = event.params.to.toHexString();
-    log.info('asefasef2.2', []);
+    log.info('liuhl2.2', []);
     // token.uri = instance.tokenURI(event.params.tokenId);
-    log.info('asefasef2.3', []);
+    log.info('liuhl2.3', []);
   }
 
-  log.info('asefasef3', []);
+  log.info('liuhl3', []);
 
-  // if (contract == null) {
-  //   contract = new Contract(event.address.toHexString());
-  //   // contract.mintedTokens = new Array<string>();
-  //   log.info('asefasef4', []);
-  // }
+  if (contract == null) {
+    contract = new Contract(event.address.toHexString());
+    // contract.mintedTokens = new Array<string>();
+    log.info('liuhl4', []);
+  }
 
   // newOwner.ownedTokens.push(token.id);
 
@@ -124,17 +124,27 @@ export function handleTransfer(event: TransferEvent): void {
   // if (index >= 0) {
   //   previousOwner.ownedTokens.splice(index,1);
   // }
-  log.info('asefasef5', []);
+  log.info('liuhl5', []);
 
   let name = instance.try_name();
   if (!name.reverted) {
+    log.info('liuhl6 {}', [name.value]);
     contract.name = name.value;
   }
 
-  // contract.symbol = instance.symbol();
-  // contract.totalSupply = instance.totalSupply();
+  let symbol = instance.try_symbol();
+  if (!symbol.reverted) {
+    log.info('liuhl6 {}', [symbol.value]);
+    contract.symbol = symbol.value;
+  }
 
-  log.info('asefasef6', []);
+  let totalSupply = instance.try_totalSupply();
+  if (!totalSupply.reverted) {
+    log.info('liuhl6 {}', [totalSupply.value.toString()]);
+    contract.totalSupply = totalSupply.value;
+  }
+
+  log.info('liuhl6', []);
 
   // The token is newly minted
   // if (contract.mintedTokens.indexOf(token.id) == -1) {
