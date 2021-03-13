@@ -14,6 +14,9 @@ This example uses the
 but it can easily be forked and pointed to another contract that follows this
 standard.
 
+See playground:
+https://thegraph.com/explorer/subgraph/schmidsi/generic-erc721-subgraph
+
 ## Fork and use your own contract
 
 The only thing that you need to change is the [`subgraph.yaml`](./subgraph.yaml)
