@@ -1,4 +1,4 @@
-# <img src="logo.png" height="100px">
+<img src="logo.png" height="100px">
 
 # Generic ERC721 Subgraph
 
