@@ -5,12 +5,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: Hashmasks
+    name: Hashmasks # Change me
     network: mainnet
     source:
-      address: '0xC2C747E0F7004F9E8817Db2ca4997657a7746928'
+      address: '0xC2C747E0F7004F9E8817Db2ca4997657a7746928' # Change me
       abi: ERC721
-      startBlock: 11743743
+      startBlock: 11743743 # Change me
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
