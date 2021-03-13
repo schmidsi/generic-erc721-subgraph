@@ -32,4 +32,4 @@ In `package.json` you need to search and replace
 https://thegraph.com/docs/deploy-a-subgraph#create-a-graph-explorer-account
 
 Now you can deploy and index your token. Feel free to extend the
-[`schema.graphql`](./schema.graphql) and the [`mappings.ts`](./src/mappings.ts)
+[`schema.graphql`](./schema.graphql) and the [`mapping.ts`](./src/mapping.ts)
