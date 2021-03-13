@@ -1,4 +1,6 @@
 specVersion: 0.0.2
+description: Generic ERC721 Subgraph (Transfers, Metadata)
+repository: https://github.com/schmidsi/generic-erc721-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
@@ -6,7 +8,7 @@ dataSources:
     name: ERC721
     network: mainnet
     source:
-      address: "0xC2C747E0F7004F9E8817Db2ca4997657a7746928"
+      address: '0xC2C747E0F7004F9E8817Db2ca4997657a7746928'
       abi: ERC721
       startBlock: 11743743
     mapping:
@@ -14,10 +16,9 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - ApprovalForAll
-        - NameChange
-        - OwnershipTransferred
+        - Token
+        - Owner
+        - Contract
         - Transfer
       abis:
         - name: ERC721
