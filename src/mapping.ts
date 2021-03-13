@@ -1,83 +1,132 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import {
   ERC721,
-  Approval,
-  ApprovalForAll,
-  NameChange,
-  OwnershipTransferred,
-  Transfer
+  Transfer as TransferEvent
 } from "../generated/ERC721/ERC721"
-import { ExampleEntity } from "../generated/schema"
+import { Token, Owner, Contract, Transfer } from "../generated/schema"
 
-export function handleApproval(event: Approval): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
+// export function handleApproval(event: Approval): void {
+  // // Entities can be loaded from the store using a string ID; this ID
+  // // needs to be unique across all entities of the same type
+  // let entity = ExampleEntity.load(event.transaction.from.toHexString())
 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (entity == null) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
+  // // Entities only exist after they have been saved to the store;
+  // // `null` checks allow to create entities on demand
+  // if (entity == null) {
+  //   entity = new ExampleEntity(event.transaction.from.toHexString())
 
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+  //   // Entity fields can be set using simple assignments
+  //   entity.count = BigInt.fromI32(0)
+  // }
+
+  // // BigInt and BigDecimal math are supported
+  // entity.count = entity.count + BigInt.fromI32(1)
+
+  // // Entity fields can be set based on event parameters
+  // entity.owner = event.params.owner
+  // entity.approved = event.params.approved
+
+  // // Entities can be written to the store with `.save()`
+  // entity.save()
+
+  // // Note: If a handler doesn't require existing field values, it is faster
+  // // _not_ to load the entity from the store. Instead, create it fresh with
+  // // `new Entity(...)`, set the fields that should be updated and save the
+  // // entity back to the store. Fields that were not set or unset remain
+  // // unchanged, allowing for partial updates to be applied.
+
+  // // It is also possible to access smart contracts from mappings. For
+  // // example, the contract that has emitted the event can be connected to
+  // // with:
+  // //
+  // // let contract = Contract.bind(event.address)
+  // //
+  // // The following functions can then be called on this contract to access
+  // // state variables and other data:
+  // //
+  // // - contract.PRICE(...)
+  // // - contract.TOTAL_MAX_SUPPLY(...)
+  // // - contract.balanceOf(...)
+  // // - contract.baseURI(...)
+  // // - contract.colorOfOwnerByIndex(...)
+  // // - contract.contractOwner(...)
+  // // - contract.contractURI(...)
+  // // - contract.esvgURI(...)
+  // // - contract.exists(...)
+  // // - contract.founderContract(...)
+  // // - contract.getApproved(...)
+  // // - contract.getCollectionArray(...)
+  // // - contract.getCollectionHexString(...)
+  // // - contract.getLatestPrice(...)
+  // // - contract.getPrice(...)
+  // // - contract.getPriceSource(...)
+  // // - contract.isApprovedForAll(...)
+  // // - contract.isNameReserved(...)
+  // // - contract.name(...)
+  // // - contract.ownerOf(...)
+  // // - contract.priceFeedAddress(...)
+  // // - contract.renderSVG(...)
+  // // - contract.rgb(...)
+  // // - contract.supportsInterface(...)
+  // // - contract.svgURI(...)
+  // // - contract.symbol(...)
+  // // - contract.toLower(...)
+  // // - contract.tokenByIndex(...)
+  // // - contract.tokenIdToColor(...)
+  // // - contract.tokenIdToColorHex(...)
+  // // - contract.tokenNameById(...)
+  // // - contract.tokenOfOwnerByIndex(...)
+  // // - contract.tokenURI(...)
+  // // - contract.totalSupply(...)
+  // // - contract.validateName(...)
+// }
+
+
+export function handleTransfer(event: TransferEvent): void {
+  // let previousOwner = Owner.load(event.params.from.toHexString());
+  // let newOwner = Owner.load(event.params.to.toHexString());
+  let token = Token.load(event.params.tokenId.toHexString());
+  let contract = Contract.load(event.address.toHexString());
+  let instance = ERC721.bind(event.address);
+
+  // if (previousOwner == null) {
+  //   previousOwner = new Owner(event.params.from.toHexString())
+  //   previousOwner.ownedTokens = new Array<string>();
+  // }
+  // if (newOwner == null) {
+  //   newOwner = new Owner(event.params.to.toHexString())
+  //   newOwner.ownedTokens = new Array<string>();
+  // }
+  if (token == null) {
+    token = new Token(event.params.tokenId.toHexString());
+    token.owner = event.params.to.toHexString();
+    token.uri = instance.tokenURI(event.params.tokenId);
+  }
+  if (contract == null) {
+    contract = new Contract(event.address.toHexString())
+    contract.mintedTokens = new Array<string>();
   }
 
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
+  // newOwner.ownedTokens.push(token.id);
 
-  // Entity fields can be set based on event parameters
-  entity.owner = event.params.owner
-  entity.approved = event.params.approved
+  // let index = previousOwner.ownedTokens.indexOf(token.id);
+  // if (index >= 0) {
+  //   previousOwner.ownedTokens.splice(index,1);
+  // }
 
-  // Entities can be written to the store with `.save()`
-  entity.save()
+  contract.name = instance.name();
+  contract.symbol = instance.symbol();
+  contract.totalSupply = instance.totalSupply();
 
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
+  // The token is newly minted
+  if (contract.mintedTokens.indexOf(token.id) == -1) {
+    let mintedTokens = contract.mintedTokens;
+    mintedTokens.push(token.id);
+    contract.mintedTokens = mintedTokens;
+  }
 
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.HASHMASKS_PROVENANCE(...)
-  // - contract.MAX_NFT_SUPPLY(...)
-  // - contract.NAME_CHANGE_PRICE(...)
-  // - contract.REVEAL_TIMESTAMP(...)
-  // - contract.SALE_START_TIMESTAMP(...)
-  // - contract.balanceOf(...)
-  // - contract.getApproved(...)
-  // - contract.getNFTPrice(...)
-  // - contract.isApprovedForAll(...)
-  // - contract.isMintedBeforeReveal(...)
-  // - contract.isNameReserved(...)
-  // - contract.name(...)
-  // - contract.owner(...)
-  // - contract.ownerOf(...)
-  // - contract.startingIndex(...)
-  // - contract.startingIndexBlock(...)
-  // - contract.supportsInterface(...)
-  // - contract.symbol(...)
-  // - contract.toLower(...)
-  // - contract.tokenByIndex(...)
-  // - contract.tokenNameByIndex(...)
-  // - contract.tokenOfOwnerByIndex(...)
-  // - contract.totalSupply(...)
-  // - contract.validateName(...)
+  // previousOwner.save();
+  // newOwner.save();
+  token.save();
+  contract.save();
 }
-
-export function handleApprovalForAll(event: ApprovalForAll): void {}
-
-export function handleNameChange(event: NameChange): void {}
-
-export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
-
-export function handleTransfer(event: Transfer): void {}
