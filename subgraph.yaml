@@ -5,7 +5,7 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: ERC721
+    name: Hashmasks
     network: mainnet
     source:
       address: '0xC2C747E0F7004F9E8817Db2ca4997657a7746928'
@@ -27,3 +27,26 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/mapping.ts
+  # - kind: ethereum/contract
+  #   name: Colorverse
+  #   network: mainnet
+  #   source:
+  #     address: '0xfEe27FB71ae3FEEEf2c11f8e02037c42945E87C4'
+  #     abi: ERC721
+  #     startBlock: 11973255
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - Token
+  #       - Owner
+  #       - Contract
+  #       - Transfer
+  #     abis:
+  #       - name: ERC721
+  #         file: ./abis/ERC721.json
+  #     eventHandlers:
+  #       - event: Transfer(indexed address,indexed address,indexed uint256)
+  #         handler: handleTransfer
+  #     file: ./src/mapping.ts
