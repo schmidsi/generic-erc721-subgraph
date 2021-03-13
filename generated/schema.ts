@@ -42,23 +42,6 @@ export class Token extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get name(): string | null {
-    let value = this.get("name");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set name(value: string | null) {
-    if (value === null) {
-      this.unset("name");
-    } else {
-      this.set("name", Value.fromString(value as string));
-    }
-  }
-
   get owner(): string | null {
     let value = this.get("owner");
     if (value === null || value.kind == ValueKind.NULL) {
@@ -100,6 +83,23 @@ export class Token extends Entity {
 
   set transfers(value: Array<string>) {
     this.set("transfers", Value.fromStringArray(value));
+  }
+
+  get contract(): string | null {
+    let value = this.get("contract");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set contract(value: string | null) {
+    if (value === null) {
+      this.unset("contract");
+    } else {
+      this.set("contract", Value.fromString(value as string));
+    }
   }
 }
 
@@ -241,23 +241,6 @@ export class Contract extends Entity {
     }
   }
 
-  get maxSupply(): BigInt | null {
-    let value = this.get("maxSupply");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set maxSupply(value: BigInt | null) {
-    if (value === null) {
-      this.unset("maxSupply");
-    } else {
-      this.set("maxSupply", Value.fromBigInt(value as BigInt));
-    }
-  }
-
   get mintedTokens(): Array<string> {
     let value = this.get("mintedTokens");
     return value.toStringArray();
@@ -341,13 +324,13 @@ export class Transfer extends Entity {
     }
   }
 
-  get date(): BigInt {
-    let value = this.get("date");
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
     return value.toBigInt();
   }
 
-  set date(value: BigInt) {
-    this.set("date", Value.fromBigInt(value));
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
   }
 
   get block(): BigInt {
@@ -359,12 +342,12 @@ export class Transfer extends Entity {
     this.set("block", Value.fromBigInt(value));
   }
 
-  get tx(): string {
-    let value = this.get("tx");
+  get transactionHash(): string {
+    let value = this.get("transactionHash");
     return value.toString();
   }
 
-  set tx(value: string) {
-    this.set("tx", Value.fromString(value));
+  set transactionHash(value: string) {
+    this.set("transactionHash", Value.fromString(value));
   }
 }
