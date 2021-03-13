@@ -87,10 +87,10 @@ export function handleTransfer(event: TransferEvent): void {
   // let previousOwner = Owner.load(event.params.from.toHexString());
   // let newOwner = Owner.load(event.params.to.toHexString());
   let token = Token.load(event.params.tokenId.toHexString());
-  // let contract = Contract.load(event.address.toHexString());
-  // let instance = ERC721.bind(event.address);
+  let contract = Contract.load(event.address.toHexString());
+  let instance = ERC721.bind(event.address);
 
-  log.info('qwertzuip1', []);
+  log.info('asefasef', []);
 
   // if (previousOwner == null) {
   //   previousOwner = new Owner(event.params.from.toHexString())
@@ -101,21 +101,21 @@ export function handleTransfer(event: TransferEvent): void {
   //   newOwner.ownedTokens = new Array<string>();
   // }
   if (token == null) {
-    log.info('qwertzuip2', []);
+    log.info('asefasef2', []);
     token = new Token(event.params.tokenId.toHexString());
-    log.info('qwertzuip2.1', []);
+    log.info('asefasef2.1', []);
     token.owner = event.params.to.toHexString();
-    log.info('qwertzuip2.2', []);
+    log.info('asefasef2.2', []);
     // token.uri = instance.tokenURI(event.params.tokenId);
-    log.info('qwertzuip2.3', []);
+    log.info('asefasef2.3', []);
   }
 
-  log.info('qwertzuip3', []);
+  log.info('asefasef3', []);
 
   // if (contract == null) {
   //   contract = new Contract(event.address.toHexString());
   //   // contract.mintedTokens = new Array<string>();
-  //   log.info('qwertzuip4', []);
+  //   log.info('asefasef4', []);
   // }
 
   // newOwner.ownedTokens.push(token.id);
@@ -124,13 +124,17 @@ export function handleTransfer(event: TransferEvent): void {
   // if (index >= 0) {
   //   previousOwner.ownedTokens.splice(index,1);
   // }
-  log.info('qwertzuip5', []);
+  log.info('asefasef5', []);
 
-  // contract.name = instance.name();
+  let name = instance.try_name();
+  if (!name.reverted) {
+    contract.name = name.value;
+  }
+
   // contract.symbol = instance.symbol();
   // contract.totalSupply = instance.totalSupply();
 
-  log.info('qwertzuip6', []);
+  log.info('asefasef6', []);
 
   // The token is newly minted
   // if (contract.mintedTokens.indexOf(token.id) == -1) {
@@ -142,7 +146,7 @@ export function handleTransfer(event: TransferEvent): void {
   // previousOwner.save();
   // newOwner.save();
   token.save();
-  // contract.save();
+  contract.save();
 
   log.info('Done handleTransfer', []);
 }
