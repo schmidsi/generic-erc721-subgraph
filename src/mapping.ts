@@ -29,7 +29,6 @@ export function handleTransfer(event: TransferEvent): void {
 
   if (token == null) {
     token = new Token(event.params.tokenId.toHexString());
-    token.owner = event.params.to.toHexString();
     token.contract = event.address.toHexString();
 
     let uri = instance.try_tokenURI(event.params.tokenId);
@@ -37,6 +36,8 @@ export function handleTransfer(event: TransferEvent): void {
       token.uri = uri.value;
     }
   }
+
+  token.owner = event.params.to.toHexString();
 
   if (transfer == null) {
     transfer = new Transfer(transferId);
